@@ -89,5 +89,5 @@ A plataforma resolve esses problemas oferecendo:
 
 ---
 
-## 📌 Pitch Resumido
+## 📌 Elevator Pitch
 Uma **plataforma de reviews de jogos digitais** feita pela comunidade, com foco em transparência e recomendações personalizadas, centralizando todas as opiniões em um único lugar e dando espaço para **desenvolvedores indies** se conectarem com jogadores.
