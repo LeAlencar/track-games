@@ -40,7 +40,8 @@ A plataforma resolve esses problemas oferecendo:
 ## 🎯 Público-Alvo
 - Jogadores casuais e hardcore.  
 - Jogadores de **mobile games**.  
-- **Desenvolvedores de jogos** que buscam feedback real.  
+- **Desenvolvedores de jogos** que buscam feedback real.
+- Desenvolvedores independentes menores que precisam de visibilidade. 
 - **Veículos de mídia** interessados em conteúdo especializado em jogos.  
 
 ---
