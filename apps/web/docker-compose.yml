@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: track-games-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: track_games
+      POSTGRES_USER: track_games_user
+      POSTGRES_PASSWORD: track_games_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./docker/init:/docker-entrypoint-initdb.d
+    networks:
+      - track-games-network
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: track-games-pgadmin
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: 
+      PGADMIN_DEFAULT_PASSWORD: 
+    ports:
+      - "8080:80"
+    depends_on:
+      - postgres
+    networks:
+      - track-games-network
+
+volumes:
+  postgres_data:
+
+networks:
+  track-games-network:
+    driver: bridge

@@ -8,13 +8,19 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint --max-warnings 0",
-    "check-types": "tsc --noEmit"
+    "check-types": "tsc --noEmit",
+    "db:up": "docker-compose up -d",
+    "db:down": "docker-compose down",
+    "db:reset": "docker-compose down -v && docker-compose up -d",
+    "db:logs": "docker-compose logs -f postgres"
   },
   "dependencies": {
     "@repo/ui": "*",
     "next": "^15.4.2",
     "react": "^19.1.0",
-    "react-dom": "^19.1.0"
+    "react-dom": "^19.1.0",
+    "postgres": "^3.4.3",
+    "drizzle-orm": "^0.29.0"
   },
   "devDependencies": {
     "@repo/eslint-config": "*",
@@ -22,6 +28,7 @@
     "@types/node": "^22.15.3",
     "@types/react": "19.1.0",
     "@types/react-dom": "19.1.1",
+    "drizzle-kit": "^0.20.4",
     "eslint": "^9.33.0",
     "typescript": "5.9.2"
   }
