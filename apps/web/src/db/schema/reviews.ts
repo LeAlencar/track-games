@@ -8,14 +8,13 @@ import {
   boolean,
 } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
-import { users } from "./users";
 import { games } from "./games";
 
 export const reviews = pgTable("reviews", {
   id: uuid("id").defaultRandom().primaryKey(),
-  userId: uuid("user_id")
+  /* userId: uuid("user_id")
     .references(() => users.id, { onDelete: "cascade" })
-    .notNull(),
+    .notNull(), */
   gameId: uuid("game_id")
     .references(() => games.id, { onDelete: "cascade" })
     .notNull(),
@@ -34,10 +33,10 @@ export const reviews = pgTable("reviews", {
 });
 
 export const reviewsRelations = relations(reviews, ({ one }) => ({
-  user: one(users, {
+  /* user: one(users, {
     fields: [reviews.userId],
     references: [users.id],
-  }),
+  }), */
   game: one(games, {
     fields: [reviews.gameId],
     references: [games.id],
