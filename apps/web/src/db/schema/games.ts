@@ -9,6 +9,7 @@ import {
   varchar,
   text,
 } from "drizzle-orm/pg-core";
+import { relations } from "drizzle-orm";
 
 export const games = pgTable("games", {
   id: uuid("id").defaultRandom().primaryKey(),
