@@ -33,12 +33,12 @@ npm run db:up
 
 ## 📋 Scripts Disponíveis
 
-| Script | Descrição |
-|--------|-----------|
-| `npm run db:up` | Inicia os containers do banco |
-| `npm run db:down` | Para os containers |
+| Script             | Descrição                                   |
+| ------------------ | ------------------------------------------- |
+| `npm run db:up`    | Inicia os containers do banco               |
+| `npm run db:down`  | Para os containers                          |
 | `npm run db:reset` | Reseta completamente o banco (remove dados) |
-| `npm run db:logs` | Mostra logs do PostgreSQL |
+| `npm run db:logs`  | Mostra logs do PostgreSQL                   |
 
 ## 🏗️ Estrutura do Banco
 
@@ -57,7 +57,7 @@ O banco usa o schema `track_games` para organizar as tabelas.
 ### Conexão com Drizzle ORM
 
 ```typescript
-import { db } from './src/db/connection';
+import { db } from "./src/db/connection";
 
 // Exemplo de uso
 const users = await db.select().from(usersTable);
@@ -98,6 +98,7 @@ O arquivo `docker-compose.yml` inclui:
 ## 🆘 Solução de Problemas
 
 ### Container não inicia
+
 ```bash
 # Verificar logs
 npm run db:logs
@@ -107,11 +108,13 @@ npm run db:reset
 ```
 
 ### Erro de conexão
+
 - Verifique se o Docker está rodando
 - Confirme as variáveis de ambiente
 - Teste a conectividade na porta 5432
 
 ### Problemas de permissão
+
 ```bash
 # No Windows, execute como administrador
 # No Linux/Mac, verifique permissões do Docker
