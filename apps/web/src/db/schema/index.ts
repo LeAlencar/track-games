@@ -1,7 +1,3 @@
-import { games } from "./games";
-import { reviews } from "./reviews";
-
-export const schema = {
-  games,
-  reviews,
-};
+export * from "./games";
+export * from "./reviews";
+export * from "./auth-schema";
