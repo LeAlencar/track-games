@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Gamepad2, Home, Library, Search, Settings2 } from "lucide-react";
+import { Gamepad2, Home, Library, Search, Settings2, Heart } from "lucide-react";
 
 import { NavMain } from "@/components/nav-main";
 import { NavUser } from "@/components/nav-user";
@@ -34,6 +34,11 @@ const data = {
       title: "Minha Biblioteca",
       url: "/library",
       icon: Library,
+    },
+    {
+      title: "Favoritos",
+      url: "/favorites",
+      icon: Heart,
     },
     /*    {
       title: "Configurações",

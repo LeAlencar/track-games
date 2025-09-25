@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Plus, Check, Loader2, BookOpen } from "lucide-react";
+import { Plus, Check, Loader2, BookOpen, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -36,6 +36,7 @@ interface AddToLibraryButtonProps {
   onStatusChange?: () => void;
   variant?: "default" | "outline" | "ghost";
   size?: "sm" | "default" | "lg";
+  isFavorite?: boolean;
 }
 
 const statusOptions: UserGameStatus[] = [
@@ -68,10 +69,13 @@ export function AddToLibraryButton({
   onStatusChange,
   variant = "default",
   size = "default",
+  isFavorite = false,
 }: AddToLibraryButtonProps) {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [fetchingData, setFetchingData] = useState(false);
+  const [favoriteLoading, setFavoriteLoading] = useState(false);
+  const [isCurrentlyFavorite, setIsCurrentlyFavorite] = useState(isFavorite);
   const [status, setStatus] = useState<UserGameStatus>(
     currentStatus || "want_to_play"
   );
@@ -81,6 +85,11 @@ export function AddToLibraryButton({
 
   const { user, isAuthenticated } = useAuth();
   const userId = user?.id;
+
+  // Update favorite state when prop changes
+  useEffect(() => {
+    setIsCurrentlyFavorite(isFavorite);
+  }, [isFavorite]);
 
   // Fetch and populate form state when editing existing entries
   useEffect(() => {
@@ -98,6 +107,7 @@ export function AddToLibraryButton({
             setPriority(userGame.priority || "medium");
             setPlatform(userGame.platform || "");
             setPersonalNotes(userGame.personalNotes || "");
+            setIsCurrentlyFavorite(userGame.isFavorite || false);
           }
         } catch (error) {
           console.error("Failed to fetch user game data:", error);
@@ -114,6 +124,7 @@ export function AddToLibraryButton({
         setPriority("medium");
         setPlatform("");
         setPersonalNotes("");
+        setIsCurrentlyFavorite(false);
       }
     };
 
@@ -159,6 +170,32 @@ export function AddToLibraryButton({
     }
   };
 
+  const handleToggleFavorite = async () => {
+    if (!userId || !isAuthenticated) return;
+
+    setFavoriteLoading(true);
+    try {
+      if (!isInLibrary) {
+        // If game is not in library, add it as favorite with default status
+        await UserGameClientService.addGameToLibrary(userId, gameId, {
+          status: "want_to_play",
+          priority: "medium",
+          isFavorite: true,
+        });
+        setIsCurrentlyFavorite(true);
+      } else {
+        // If game is in library, toggle favorite status
+        const response = await UserGameClientService.toggleFavorite(userId, gameId);
+        setIsCurrentlyFavorite(response.isFavorite);
+      }
+      onStatusChange?.();
+    } catch (error) {
+      console.error("Failed to toggle favorite:", error);
+    } finally {
+      setFavoriteLoading(false);
+    }
+  };
+
   const handleRemoveFromLibrary = async () => {
     if (!userId || !isAuthenticated) {
       console.error("User not authenticated");
@@ -180,15 +217,16 @@ export function AddToLibraryButton({
 
   if (isInLibrary) {
     return (
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogTrigger asChild>
-          <Button variant={variant} size={size} className="gap-2">
-            <Check className="h-4 w-4" />
-            {currentStatus
-              ? getStatusDisplayName(currentStatus)
-              : "Na Biblioteca"}
-          </Button>
-        </DialogTrigger>
+      <div className="flex gap-2">
+        <Dialog open={open} onOpenChange={setOpen}>
+          <DialogTrigger asChild>
+            <Button variant={variant} size={size} className="gap-2">
+              <Check className="h-4 w-4" />
+              {currentStatus
+                ? getStatusDisplayName(currentStatus)
+                : "Na Biblioteca"}
+            </Button>
+          </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
             <DialogTitle>Atualizar na Biblioteca</DialogTitle>
@@ -299,17 +337,39 @@ export function AddToLibraryButton({
           </div>
         </DialogContent>
       </Dialog>
+      
+      {/* Favorite Button */}
+      <Button
+        size={size}
+        variant="ghost"
+        className={`p-2 ${
+          isCurrentlyFavorite 
+            ? "text-red-500 hover:text-red-600" 
+            : "text-gray-400 hover:text-red-500"
+        }`}
+        onClick={handleToggleFavorite}
+        disabled={favoriteLoading}
+        title={isCurrentlyFavorite ? "Remover dos favoritos" : "Adicionar aos favoritos"}
+      >
+        <Heart 
+          className={`h-4 w-4 ${
+            isCurrentlyFavorite ? "fill-current" : ""
+          }`} 
+        />
+      </Button>
+    </div>
     );
   }
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button variant={variant} size={size} className="gap-2">
-          <Plus className="h-4 w-4" />
-          Adicionar à Biblioteca
-        </Button>
-      </DialogTrigger>
+    <div className="flex gap-2">
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogTrigger asChild>
+          <Button variant={variant} size={size} className="gap-2">
+            <Plus className="h-4 w-4" />
+            Adicionar à Biblioteca
+          </Button>
+        </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Adicionar à Biblioteca</DialogTitle>
@@ -402,5 +462,26 @@ export function AddToLibraryButton({
         </Button>
       </DialogContent>
     </Dialog>
+    
+    {/* Favorite Button */}
+    <Button
+      size={size}
+      variant="ghost"
+      className={`p-2 ${
+        isCurrentlyFavorite 
+          ? "text-red-500 hover:text-red-600" 
+          : "text-gray-400 hover:text-red-500"
+      }`}
+      onClick={handleToggleFavorite}
+      disabled={favoriteLoading}
+      title={isCurrentlyFavorite ? "Remover dos favoritos" : "Adicionar aos favoritos"}
+    >
+      <Heart 
+        className={`h-4 w-4 ${
+          isCurrentlyFavorite ? "fill-current" : ""
+        }`} 
+      />
+    </Button>
+  </div>
   );
 }
