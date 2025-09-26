@@ -93,7 +93,7 @@ export function GameCard({
 
   return (
     <Card className="overflow-hidden hover:shadow-lg transition-all duration-200 group">
-      <Link href={`/games/${game.slug}`}>
+      <Link href={`#`}>
         <div className="relative aspect-video w-full">
           {game.backgroundImage ? (
             <Image

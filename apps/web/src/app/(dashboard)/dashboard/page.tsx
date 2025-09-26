@@ -138,9 +138,9 @@ export default function Dashboard() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-primary">
-            Olá, {user?.name || user?.email || "Usuário"}! 
+            Olá, {user?.name || user?.email || "Usuário"}!
           </h1>
-          <p className="text-secondary mt-1">
+          <p className="dark:text-secondary mt-1">
             Bem-vindo ao seu dashboard de jogos
           </p>
         </div>
@@ -232,7 +232,7 @@ export default function Dashboard() {
         {/* Recommendations */}
         <div className="bg-background p-6 rounded-lg border">
           <h2 className="text-lg font-semibold mb-4">Recomendações</h2>
-          <div className="text-secondary text-center py-8">
+          <div className="dark:text-secondary text-center py-8">
             <p>Recomendações personalizadas em breve!</p>
             <p className="text-sm mt-1">Baseadas nos seus jogos favoritos</p>
           </div>

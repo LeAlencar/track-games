@@ -183,14 +183,6 @@ export default function LibraryPage() {
     fetchLibrary();
   }, [userId, isAuthenticated, statusFilter, authLoading]);
 
-  useEffect(() => {
-    // Debounce search
-    const timeoutId = setTimeout(() => {
-      // No need to refetch for search since we filter client-side
-    }, 500);
-    return () => clearTimeout(timeoutId);
-  }, [searchTerm]);
-
   // Show loading while authentication is being checked
   if (authLoading) {
     return (

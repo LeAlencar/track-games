@@ -12,6 +12,7 @@
  * Environment Variables Required:
  *   RAWG_API_KEY - Your RAWG API key from https://rawg.io/apidocs
  *   DATABASE_URL - PostgreSQL connection string
+ *   DEBUG_STEAM - Set to "true" to enable Steam extraction debugging
  */
 
 import { drizzle } from "drizzle-orm/node-postgres";
@@ -36,6 +37,7 @@ const RETRY_DELAY = 2000; // 2 seconds
 // Default script parameters
 const DEFAULT_PAGES = 10;
 const DEFAULT_PAGE_SIZE = 20; // RAWG default is 20, max is 40
+const DEBUG_STEAM_EXTRACTION = process.env.DEBUG_STEAM === "true";
 
 // Types for RAWG API responses
 interface RawgGame {
@@ -256,22 +258,68 @@ class GameDataTransformer {
     };
   }
 
-  static extractSteamData(stores: RawgGameStore[]): {
+  static extractSteamData(
+    stores: RawgGameStore[],
+    debugGame?: string
+  ): {
     steamAppId: number | null;
     steamPrice: string | null;
   } {
-    // Steam store ID is typically 1 in RAWG
-    const steamStore = stores.find((store) => store.store_id === "1");
+    // Log stores for debugging
+    if (debugGame && stores.length > 0) {
+      console.log(
+        `🔍 [${debugGame}] Found ${stores.length} stores:`,
+        stores.map((s) => ({
+          id: s.id,
+          store_id: s.store_id,
+          url: s.url.substring(0, 50) + "...",
+        }))
+      );
+    }
+
+    // Try multiple approaches to find Steam store
+    // 1. Look for Steam by URL pattern first (most reliable)
+    let steamStore = stores.find(
+      (store) =>
+        store.url &&
+        (store.url.includes("store.steampowered.com") ||
+          store.url.includes("steam"))
+    );
+
+    // 2. If not found, try common Steam store IDs
+    if (!steamStore) {
+      // Try store_id as string and number - Steam is commonly ID 1, 2, or 11
+      const commonSteamIds = ["1", "2", "11", 1, 2, 11];
+      steamStore = stores.find(
+        (store) =>
+          commonSteamIds.includes(store.store_id) ||
+          commonSteamIds.includes(parseInt(store.store_id.toString(), 10))
+      );
+    }
 
     if (steamStore?.url) {
       // Extract Steam app ID from URL like: https://store.steampowered.com/app/12345/game-name/
       const steamMatch = steamStore.url.match(/\/app\/(\d+)/);
       if (steamMatch && steamMatch[1]) {
+        const appId = parseInt(steamMatch[1], 10);
+        if (debugGame) {
+          console.log(
+            `✅ [${debugGame}] Found Steam App ID: ${appId} from store_id: ${steamStore.store_id}, URL: ${steamStore.url}`
+          );
+        }
         return {
-          steamAppId: parseInt(steamMatch[1], 10),
+          steamAppId: appId,
           steamPrice: null, // Price would need to be fetched separately from Steam API
         };
+      } else if (debugGame) {
+        console.log(
+          `❌ [${debugGame}] Steam store found but couldn't extract app ID from URL: ${steamStore.url}`
+        );
       }
+    } else if (debugGame && stores.length > 0) {
+      console.log(
+        `❌ [${debugGame}] No Steam store found among ${stores.length} stores`
+      );
     }
 
     return {
@@ -367,20 +415,32 @@ class GameDataFetcher {
 
       // Fetch additional game data
       const [screenshots, movies, stores] = await Promise.all([
-        this.apiClient
-          .getGameScreenshots(rawgGame.id)
-          .catch(() => ({ results: [] })),
-        this.apiClient
-          .getGameMovies(rawgGame.id)
-          .catch(() => ({ results: [] })),
-        this.apiClient
-          .getGameStores(rawgGame.id)
-          .catch(() => ({ results: [] })),
+        this.apiClient.getGameScreenshots(rawgGame.id).catch((error) => {
+          console.warn(
+            `⚠️  Failed to fetch screenshots for ${rawgGame.name}: ${error.message}`
+          );
+          return { results: [] };
+        }),
+        this.apiClient.getGameMovies(rawgGame.id).catch((error) => {
+          console.warn(
+            `⚠️  Failed to fetch movies for ${rawgGame.name}: ${error.message}`
+          );
+          return { results: [] };
+        }),
+        this.apiClient.getGameStores(rawgGame.id).catch((error) => {
+          console.warn(
+            `⚠️  Failed to fetch stores for ${rawgGame.name}: ${error.message}`
+          );
+          return { results: [] };
+        }),
       ]);
 
       const screenshotUrls = screenshots.results.map((s) => s.image);
       const trailerUrls = movies.results.map((m) => m.data?.max || m.preview);
-      const steamData = GameDataTransformer.extractSteamData(stores.results);
+      const steamData = GameDataTransformer.extractSteamData(
+        stores.results,
+        DEBUG_STEAM_EXTRACTION ? rawgGame.name : undefined
+      );
 
       const gameData = GameDataTransformer.transformGame(
         rawgGame,
@@ -460,6 +520,10 @@ async function main() {
           "  --page-size <number>  Games per page, max 40 (default: 20)"
         );
         console.log("  --help                Show this help");
+        console.log("\nEnvironment Variables:");
+        console.log(
+          "  DEBUG_STEAM=true      Enable Steam extraction debugging"
+        );
         process.exit(0);
     }
   }

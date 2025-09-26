@@ -81,7 +81,7 @@ export function DashboardStats({ stats, loading }: DashboardStatsProps) {
         return (
           <Card key={i}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-secondary">
+              <CardTitle className="text-sm font-medium dark:text-secondary">
                 {stat.title}
               </CardTitle>
               <div className={`p-2 rounded-md ${stat.bgColor}`}>
