@@ -33,8 +33,8 @@ export function DashboardStats({ stats, loading }: DashboardStatsProps) {
         {Array.from({ length: 4 }).map((_, i) => (
           <Card key={i} className="animate-pulse">
             <CardContent className="p-6">
-              <div className="h-4 bg-gray-200 rounded mb-2"></div>
-              <div className="h-8 bg-gray-200 rounded"></div>
+              <div className="h-4 bg-background rounded mb-2"></div>
+              <div className="h-8 bg-background rounded"></div>
             </CardContent>
           </Card>
         ))}
@@ -47,30 +47,30 @@ export function DashboardStats({ stats, loading }: DashboardStatsProps) {
       title: "Jogos na Biblioteca",
       value: stats?.total || 0,
       icon: BookOpen,
-      color: "text-blue-600",
-      bgColor: "bg-blue-100",
+      color: "text-orange-500",
+      bgColor: "bg-transparent",
     },
     {
       title: "Jogando Atualmente",
       value: stats?.playing || 0,
       icon: Gamepad2,
-      color: "text-green-600",
-      bgColor: "bg-green-100",
+      color: "text-orange-500",
+      bgColor: "bg-transparent",
     },
     {
       title: "Jogos Concluídos",
       value: stats?.completed || 0,
       icon: Trophy,
-      color: "text-purple-600",
-      bgColor: "bg-purple-100",
+      color: "text-orange-500",
+      bgColor: "bg-transparent",
     },
 
     {
       title: "Quero Jogar",
       value: stats?.want_to_play || 0,
       icon: Target,
-      color: "text-blue-500",
-      bgColor: "bg-blue-50",
+      color: "text-orange-500",
+      bgColor: "bg-transparent",
     },
   ];
 
@@ -81,7 +81,7 @@ export function DashboardStats({ stats, loading }: DashboardStatsProps) {
         return (
           <Card key={i}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-gray-600">
+              <CardTitle className="text-sm font-medium text-secondary">
                 {stat.title}
               </CardTitle>
               <div className={`p-2 rounded-md ${stat.bgColor}`}>

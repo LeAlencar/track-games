@@ -187,8 +187,8 @@ export default function GamesPage() {
       </div>
 
       {/* Filters and Search */}
-      <Card>
-        <CardContent className="p-4 w-full">
+      <Card className="w-full p-1">
+        <CardContent>
           <div className="flex flex-col md:flex-row gap-4">
             {/* Search */}
             <div className="flex-1 relative">

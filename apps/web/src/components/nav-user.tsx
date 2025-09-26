@@ -26,10 +26,21 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { useAuth } from "@/hooks/use-auth";
+import { signOut } from "@/lib/auth-client";
 
 export function NavUser() {
   const { isMobile } = useSidebar();
   const { user } = useAuth();
+
+  const handleLogout = async () => {
+    try {
+      await signOut();
+      // Redirect to home page after logout
+      window.location.href = "/";
+    } catch (error) {
+      console.error("Erro ao fazer logout:", error);
+    }
+  };
 
   if (!user) {
     return null;
@@ -91,9 +102,9 @@ export function NavUser() {
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={handleLogout}>
               <LogOut />
-              Log out
+              Sair
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

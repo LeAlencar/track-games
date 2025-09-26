@@ -1,6 +1,6 @@
 # 🗄️ Configuração do Banco de Dados PostgreSQL
 
-Este documento explica como configurar e usar o banco de dados PostgreSQL com Docker para o projeto Track Games.
+Este documento explica como configurar e usar o banco de dados PostgreSQL com Docker para o projeto Ludexicon.
 
 ## 🚀 Início Rápido
 
