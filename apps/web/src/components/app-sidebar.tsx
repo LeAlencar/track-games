@@ -16,7 +16,7 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 
-// Track Games navigation data
+// Ludexicon navigation data
 const data = {
   navMain: [
     {
@@ -58,18 +58,19 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               size="lg"
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
-              <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
+              <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-gradient-to-r from-orange-500 to-orange-600 text-white">
                 <Gamepad2 className="size-4" />
               </div>
               <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-semibold">Track Games</span>
+                <span className="truncate font-semibold">Ludexicon</span>
               </div>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
-      <SidebarContent>
-        <NavMain items={data.navMain} />
+      <SidebarContent >
+        <NavMain
+         items={data.navMain} />
       </SidebarContent>
       <SidebarFooter>
         <NavUser />

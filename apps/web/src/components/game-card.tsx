@@ -111,7 +111,7 @@ export function GameCard({
           {/* Rating overlay */}
           {game.rating && (
             <div className="absolute top-2 right-2 bg-black/70 text-white px-2 py-1 rounded text-sm flex items-center gap-1">
-              <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
+              <Star className="w-3 h-3 fill-orange-400 text-white-400" />
               {formatRating(game.rating, game.ratingTop)}
             </div>
           )}
@@ -123,7 +123,7 @@ export function GameCard({
           {/* Title and Release Year */}
           <div>
             <Link href={`/games/${game.slug}`}>
-              <h3 className="font-semibold text-lg leading-tight hover:text-purple-600 transition-colors">
+              <h3 className="font-semibold text-lg leading-tight hover:text-orange-600 transition-colors">
                 {game.name}
               </h3>
             </Link>

@@ -126,7 +126,7 @@ export default function Dashboard() {
 
   if (authLoading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
+      <div className="flex items-center justify-center min-h-screen bg-background">
         <Skeleton className="h-full w-full rounded-full" />
       </div>
     );
@@ -137,10 +137,10 @@ export default function Dashboard() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">
-            Olá, {user?.name || user?.email || "Usuário"}! 👋
+          <h1 className="text-3xl font-bold text-primary">
+            Olá, {user?.name || user?.email || "Usuário"}! 
           </h1>
-          <p className="text-gray-600 mt-1">
+          <p className="text-secondary mt-1">
             Bem-vindo ao seu dashboard de jogos
           </p>
         </div>
@@ -152,9 +152,9 @@ export default function Dashboard() {
       {/* Additional sections that can be added later */}
       <div className="grid gap-8 md:grid-cols-2">
         {/* Currently Playing Games */}
-        <div className="bg-white p-6 rounded-lg border">
+        <div className="bg-background p-6 rounded-lg border">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold">🎮 Jogando Atualmente</h2>
+            <h2 className="text-lg font-semibold"> Jogando Atualmente</h2>
             {currentlyPlaying.length > 0 && (
               <Button
                 variant="outline"
@@ -169,7 +169,7 @@ export default function Dashboard() {
           </div>
 
           {currentlyPlaying.length === 0 ? (
-            <div className="text-gray-500 text-center py-8">
+            <div className="text-secondary text-center py-8">
               <p>Você não está jogando nenhum jogo no momento</p>
               <p className="text-sm mt-1">
                 Adicione jogos com status "Jogando" para vê-los aqui
@@ -186,7 +186,7 @@ export default function Dashboard() {
               {currentlyPlaying.slice(0, 3).map((game) => (
                 <div
                   key={game.userGameId}
-                  className="flex items-center space-x-3 p-3 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors"
+                  className="flex items-center space-x-3 p-3 rounded-lg bg-background bg-secondary transition-colors"
                 >
                   <div className="w-16 h-16 rounded-md overflow-hidden flex-shrink-0">
                     {game.backgroundImage ? (
@@ -196,22 +196,22 @@ export default function Dashboard() {
                         className="w-full h-full object-cover"
                       />
                     ) : (
-                      <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-                        <span className="text-gray-400 text-xs">No Image</span>
+                      <div className="w-full h-full bg-background flex items-center justify-center">
+                        <span className="text-secondary text-xs">No Image</span>
                       </div>
                     )}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h3 className="font-medium text-gray-900 truncate">
+                    <h3 className="font-medium text-primary truncate">
                       {game.name || "Unknown Game"}
                     </h3>
-                    <p className="text-sm text-gray-500">
+                    <p className="text-sm text-secondary">
                       {game.hoursPlayed
                         ? `${game.hoursPlayed}h jogado`
                         : "Sem horas registradas"}
                     </p>
                     {game.platform && (
-                      <p className="text-xs text-gray-400">{game.platform}</p>
+                      <p className="text-xs text-secondary">{game.platform}</p>
                     )}
                   </div>
                   <Button
@@ -230,9 +230,9 @@ export default function Dashboard() {
         </div>
 
         {/* Recommendations */}
-        <div className="bg-white p-6 rounded-lg border">
-          <h2 className="text-lg font-semibold mb-4">💡 Recomendações</h2>
-          <div className="text-gray-500 text-center py-8">
+        <div className="bg-background p-6 rounded-lg border">
+          <h2 className="text-lg font-semibold mb-4">Recomendações</h2>
+          <div className="text-secondary text-center py-8">
             <p>Recomendações personalizadas em breve!</p>
             <p className="text-sm mt-1">Baseadas nos seus jogos favoritos</p>
           </div>

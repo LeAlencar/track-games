@@ -277,7 +277,6 @@ export default function FavoritesPage() {
                     showAddToLibrary={true}
                     isInUserLibrary={true}
                     userGameStatus={game.status}
-                    isFavorite={game.isFavorite || false}
                     onLibraryChange={handleLibraryChange}
                   />
                 </div>
