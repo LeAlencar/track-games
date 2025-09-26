@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import {
   Search,
@@ -98,7 +98,7 @@ type SortOption =
   | "personalRating";
 type StatusFilter = UserGameStatus | "all";
 
-export default function LibraryPage() {
+function LibraryPageContent() {
   const searchParams = useSearchParams();
   const initialStatus = (searchParams.get("status") as StatusFilter) || "all";
 
@@ -360,5 +360,37 @@ export default function LibraryPage() {
         )}
       </div>
     </div>
+  );
+}
+
+function LibraryPageLoading() {
+  return (
+    <div className="px-6 space-y-6 w-full">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div>
+          <h1 className="text-3xl font-bold">Minha Biblioteca</h1>
+          <p className="text-gray-600 mt-1">Carregando...</p>
+        </div>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        {Array.from({ length: 8 }).map((_, i) => (
+          <Card key={i} className="animate-pulse">
+            <div className="aspect-video bg-gray-200"></div>
+            <CardContent className="p-4 space-y-2">
+              <div className="h-4 bg-gray-200 rounded"></div>
+              <div className="h-3 bg-gray-200 rounded w-3/4"></div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export default function LibraryPage() {
+  return (
+    <Suspense fallback={<LibraryPageLoading />}>
+      <LibraryPageContent />
+    </Suspense>
   );
 }

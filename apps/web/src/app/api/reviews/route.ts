@@ -234,22 +234,23 @@ export async function PUT(request: NextRequest) {
       );
     }
 
+    // Get the existing review data
+    const currentReview = existingReview[0]!;
+
     // Update the review
     const updatedReview = await db
       .update(reviews)
       .set({
-        platform: platform || existingReview[0].platform,
-        rating: rating || existingReview[0].rating,
-        title: title !== undefined ? title : existingReview[0].title,
-        content: content !== undefined ? content : existingReview[0].content,
+        platform: platform || currentReview.platform,
+        rating: rating || currentReview.rating,
+        title: title !== undefined ? title : currentReview.title,
+        content: content !== undefined ? content : currentReview.content,
         hoursPlayed:
-          hoursPlayed !== undefined
-            ? hoursPlayed
-            : existingReview[0].hoursPlayed,
+          hoursPlayed !== undefined ? hoursPlayed : currentReview.hoursPlayed,
         isRecommended:
           isRecommended !== undefined
             ? isRecommended
-            : existingReview[0].isRecommended,
+            : currentReview.isRecommended,
         updatedAt: new Date(),
       })
       .where(eq(reviews.id, reviewId))
