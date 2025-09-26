@@ -1,7 +1,15 @@
 "use client";
 
 import * as React from "react";
-import { Gamepad2, Home, Library, Search, Settings2, Heart } from "lucide-react";
+import {
+  Gamepad2,
+  Home,
+  Library,
+  Search,
+  Settings2,
+  Heart,
+  MessageSquare,
+} from "lucide-react";
 
 import { NavMain } from "@/components/nav-main";
 import { NavUser } from "@/components/nav-user";
@@ -40,6 +48,11 @@ const data = {
       url: "/favorites",
       icon: Heart,
     },
+    {
+      title: "Reviews",
+      url: "/reviews",
+      icon: MessageSquare,
+    },
     /*    {
       title: "Configurações",
       url: "/settings",
@@ -68,9 +81,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
-      <SidebarContent >
-        <NavMain
-         items={data.navMain} />
+      <SidebarContent>
+        <NavMain items={data.navMain} />
       </SidebarContent>
       <SidebarFooter>
         <NavUser />
