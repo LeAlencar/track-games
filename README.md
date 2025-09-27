@@ -1,6 +1,12 @@
-# 🎮 Plataforma de Reviews de Jogos
+# Ludexicon
+
+---
+
+## 🎮 Plataforma de Reviews de Jogos
 
 Uma plataforma criada para reunir **reviews de jogos digitais** de forma simples, honesta e democrática, feita pela comunidade de jogadores. O objetivo é centralizar em um único lugar opiniões reais sobre jogos, evitando influências de reviews pagos e trazendo recomendações personalizadas.
+
+https://track-games-web.vercel.app/
 
 ---
 
