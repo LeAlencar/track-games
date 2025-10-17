@@ -3,6 +3,7 @@ import { user } from "./auth-schema";
 import { games } from "./games";
 import { reviews } from "./reviews";
 import { userGames } from "./user-games";
+import { followers } from "./followers";
 
 // Central relations file to avoid conflicts and circular dependencies
 
@@ -10,6 +11,10 @@ import { userGames } from "./user-games";
 export const allUserRelations = relations(user, ({ many }) => ({
   reviews: many(reviews),
   userGames: many(userGames),
+  // Followers (users that follow this user)
+  followers: many(followers, { relationName: "userFollowing" }),
+  // Following (users that this user follows)
+  following: many(followers, { relationName: "userFollowers" }),
 }));
 
 // Games relations - all game relationships

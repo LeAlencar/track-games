@@ -9,6 +9,8 @@ import {
   Settings2,
   Heart,
   MessageSquare,
+  Users,
+  UserCheck,
 } from "lucide-react";
 
 import { NavMain } from "@/components/nav-main";
@@ -52,6 +54,16 @@ const data = {
       title: "Reviews",
       url: "/reviews",
       icon: MessageSquare,
+    },
+    {
+      title: "Jogadores",
+      url: "/players",
+      icon: Users,
+    },
+    {
+      title: "Seguindo",
+      url: "/following",
+      icon: UserCheck,
     },
     /*    {
       title: "Configurações",

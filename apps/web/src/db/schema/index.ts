@@ -2,6 +2,7 @@
 export * from "./games";
 export * from "./auth-schema";
 export * from "./user-games";
+export * from "./followers";
 
 // Export reviews but not relations
 export { reviews, reviewsRelations } from "./reviews";

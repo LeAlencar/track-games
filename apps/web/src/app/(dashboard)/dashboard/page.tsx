@@ -3,11 +3,8 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "@/hooks/use-auth";
 import { DashboardStats } from "@/components/dashboard-stats";
-import { RecentActivity } from "@/components/recent-activity";
-import { QuickActions } from "@/components/quick-actions";
 import { UserGameClientService } from "@/lib/user-games-client";
 import { Skeleton } from "@/components/ui/skeleton";
-import { GameCard } from "@/components/game-card";
 import { Button } from "@/components/ui/button";
 
 interface DashboardStats {
