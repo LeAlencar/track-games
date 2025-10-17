@@ -5,7 +5,7 @@ import { eq, and } from "drizzle-orm";
 
 export async function POST(
   request: Request,
-  { params }: { params: { userId: string } }
+  { params }: { params: Promise<{ userId: string }> }
 ) {
   try {
     const { userId: followingId } = await params;
@@ -64,7 +64,7 @@ export async function POST(
 
 export async function DELETE(
   request: Request,
-  { params }: { params: { userId: string } }
+  { params }: { params: Promise<{ userId: string }> }
 ) {
   try {
     const { userId: followingId } = await params;
@@ -104,7 +104,7 @@ export async function DELETE(
 // GET endpoint to check if user is following another user
 export async function GET(
   request: Request,
-  { params }: { params: { userId: string } }
+  { params }: { params: Promise<{ userId: string }> }
 ) {
   try {
     const { userId: followingId } = await params;

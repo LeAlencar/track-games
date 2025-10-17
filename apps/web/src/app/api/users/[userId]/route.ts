@@ -9,7 +9,7 @@ import { desc, sql, eq, and } from "drizzle-orm";
 
 export async function GET(
   request: Request,
-  { params }: { params: { userId: string } }
+  { params }: { params: Promise<{ userId: string }> }
 ) {
   try {
     const { userId } = await params;
