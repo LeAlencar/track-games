@@ -16,9 +16,6 @@ export async function GET(
     const url = new URL(request.url);
     const currentUserId = url.searchParams.get("currentUserId");
 
-    console.log("userId", userId);
-    console.log("currentUserId", currentUserId);
-
     // Fetch user basic info with stats
     const userInfoResult = await db
       .select({

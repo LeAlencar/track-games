@@ -33,6 +33,7 @@ export default function Dashboard() {
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [activities, setActivities] = useState<RecentActivityItem[]>([]);
   const [currentlyPlaying, setCurrentlyPlaying] = useState<any[]>([]);
+  const [recommendations, setRecommendations] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -111,6 +112,16 @@ export default function Dashboard() {
           },
         ];
         setActivities(mockActivities);
+
+        // Fetch recommendations
+        try {
+          const { recommendations: recommendedGames } =
+            await UserGameClientService.getRecommendations(user.id);
+          setRecommendations(recommendedGames || []);
+        } catch (error) {
+          console.error("Failed to fetch recommendations:", error);
+          setRecommendations([]);
+        }
       } catch (error) {
         console.error("Failed to fetch dashboard data:", error);
       } finally {
@@ -183,7 +194,7 @@ export default function Dashboard() {
               {currentlyPlaying.slice(0, 3).map((game) => (
                 <div
                   key={game.userGameId}
-                  className="flex items-center space-x-3 p-3 rounded-lg bg-background bg-secondary transition-colors"
+                  className="flex items-center space-x-3 p-3 rounded-lg hover:bg-secondary transition-colors"
                 >
                   <div className="w-16 h-16 rounded-md overflow-hidden flex-shrink-0">
                     {game.backgroundImage ? (
@@ -229,10 +240,81 @@ export default function Dashboard() {
         {/* Recommendations */}
         <div className="bg-background p-6 rounded-lg border">
           <h2 className="text-lg font-semibold mb-4">Recomendações</h2>
-          <div className="dark:text-secondary text-center py-8">
-            <p>Recomendações personalizadas em breve!</p>
-            <p className="text-sm mt-1">Baseadas nos seus jogos favoritos</p>
-          </div>
+
+          {loading ? (
+            <div className="space-y-3">
+              {[1, 2, 3].map((i) => (
+                <Skeleton key={i} className="h-20 w-full" />
+              ))}
+            </div>
+          ) : recommendations.length === 0 ? (
+            <div className="dark:text-secondary text-center py-8">
+              <p>Adicione jogos à sua biblioteca</p>
+              <p className="text-sm mt-1">
+                Recomendações serão baseadas nos seus jogos
+              </p>
+              <Button
+                className="mt-4"
+                onClick={() => (window.location.href = "/games")}
+              >
+                Explorar Jogos
+              </Button>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {recommendations.slice(0, 6).map((game) => (
+                <div
+                  key={game.id}
+                  className="flex items-center space-x-3 p-3 rounded-lg bg-background hover:bg-secondary transition-colors"
+                >
+                  <div className="w-16 h-16 rounded-md overflow-hidden flex-shrink-0">
+                    {game.backgroundImage ? (
+                      <img
+                        src={game.backgroundImage}
+                        alt={game.name || "Game"}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-secondary flex items-center justify-center">
+                        <span className="text-secondary text-xs">No Image</span>
+                      </div>
+                    )}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-medium text-primary truncate">
+                      {game.name || "Unknown Game"}
+                    </h3>
+                    <div className="flex items-center gap-2 mt-1">
+                      {game.genres &&
+                        Array.isArray(game.genres) &&
+                        game.genres.slice(0, 2).map((genre: any) => (
+                          <span
+                            key={genre.id}
+                            className="text-xs px-2 py-0.5 rounded-full bg-primary/10 text-primary"
+                          >
+                            {genre.name}
+                          </span>
+                        ))}
+                    </div>
+                    {game.rating && (
+                      <p className="text-sm text-secondary mt-1">
+                        ⭐ {parseFloat(game.rating).toFixed(1)}/5
+                      </p>
+                    )}
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() =>
+                      (window.location.href = `/games/${game.slug}`)
+                    }
+                  >
+                    Ver
+                  </Button>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>

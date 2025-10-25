@@ -194,6 +194,20 @@ export class UserGameClientService {
 
     return await response.json();
   }
+
+  /**
+   * Get game recommendations based on user's library
+   */
+  static async getRecommendations(userId: string) {
+    const response = await fetch(`/api/recommendations?userId=${userId}`);
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || "Failed to fetch recommendations");
+    }
+
+    return await response.json();
+  }
 }
 
 // Helper functions for status display (moved from server-side)
